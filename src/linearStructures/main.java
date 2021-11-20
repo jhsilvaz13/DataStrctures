@@ -110,7 +110,7 @@ public class main {
         for (int i = 0; i < cases; i++) {
             int n, m;
             LinkedList<Integer> nLink, mLink;
-            //Lectura de datos
+            //Lectura de datos de entrada
             n = IN.nextInt();
             nLink = readInput(n);
             m = IN.nextInt();
