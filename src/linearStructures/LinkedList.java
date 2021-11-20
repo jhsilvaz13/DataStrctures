@@ -80,7 +80,7 @@ public class LinkedList<T> {
             pushBack(newNode);
         }
     }
-    
+    //Elimina datos repetidos que esten consecutivos o en una lista ordenada
     public void removeRepeats(){
         Node<T> iterator=beginNode;
         while(iterator.nextNode!=null){
