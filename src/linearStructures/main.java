@@ -4,6 +4,7 @@
  */
 package linearStructures;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -15,9 +16,11 @@ public class main {
     private static final Scanner IN = new Scanner(System.in);
 
     public static void main(String[] args) {
-        punto1UNCODE();
+        //linkedList();
+        //punto2UNCODE();
+        Stacks();
     }
-
+    
     public static void linkedList0() {
         LinkedList0<Integer> beginNode = new LinkedList0<>(3);
         LinkedList0<Integer> secondNode = new LinkedList0<>(12);
@@ -48,16 +51,19 @@ public class main {
         LinkedList<Integer> linkedLista;
         linkedLista = new LinkedList<>();
         linkedLista.pushBack(new Node<Integer>(11));
-        linkedLista.pushBack(new Node<Integer>(11));
-        linkedLista.pushBack(new Node<Integer>(11));
-        linkedLista.pushBack(new Node<Integer>(11));
-        linkedLista.pushBack(new Node<Integer>(11));
-        linkedLista.pushBack(new Node<Integer>(11));
-        linkedLista.pushFront(new Node<Integer>(11));
-        linkedLista.pushFront(new Node<Integer>(11));
-        linkedLista.pushFront(new Node<Integer>(11));
-        linkedLista.pushFront(new Node<Integer>(11));
-        linkedLista.removeRepeats();
+        linkedLista.pushBack(new Node<Integer>(12));
+        linkedLista.pushBack(new Node<Integer>(13));
+        linkedLista.pushBack(new Node<Integer>(14));
+        linkedLista.pushBack(new Node<Integer>(15));
+        linkedLista.pushBack(new Node<Integer>(16));
+        linkedLista.pushFront(new Node<Integer>(10));
+        linkedLista.pushFront(new Node<Integer>(9));
+        linkedLista.pushFront(new Node<Integer>(8));
+        linkedLista.pushFront(new Node<Integer>(7));
+        linkedLista.popBack();
+
+        linkedLista.popBack();
+        linkedLista.popBack();
         linkedLista.print();
 
     }
@@ -72,6 +78,46 @@ public class main {
         s.print();
     }
 
+    public static void Queue() {
+        Queue<Integer> cola=new Queue<Integer>();
+        cola.Enqueue(new Node<Integer>(10));
+        cola.Enqueue(new Node<Integer>(11));
+        cola.Enqueue(new Node<Integer>(12));
+        cola.Enqueue(new Node<Integer>(13));
+        Node<Integer> data=cola.Dequeue();
+        System.out.println(data.data);
+        cola.print();
+    }
+    
+    public static void Double() {
+        DoubleLinkedList<Integer> d=new DoubleLinkedList<Integer>();
+        d.pushFront(new Node<Integer>(10));
+        
+        System.out.println(d.find(-10));
+        d.addBefore(d.beginNode,55);
+        d.print();
+
+    }
+    public static void dinamicA() {
+        ArrayList<Integer> a=new ArrayList<Integer>();
+        a.add(2);
+        a.print();
+        a.add(3);
+        a.print();
+        a.add(4);
+        a.print();
+        a.add(5);
+        a.print();
+        a.add(6);
+        a.print();
+        a.add(7);
+        a.print();
+        a.add(8);
+        a.print();
+        a.add(9);
+        a.print();
+        System.out.println(a.getN()+"/"+a.getLen());
+    }
     public static LinkedList<Integer> readInput(int len) {
         LinkedList<Integer> input = new LinkedList<Integer>();
         for (int i = 0; i < len; i++) {
@@ -80,32 +126,8 @@ public class main {
         }
         return input;
     }
-    public static LinkedList<Integer> mergeAndRemove(LinkedList<Integer> principalList, LinkedList<Integer> secondList) {
-        Node<Integer> iterNode = principalList.getBeginNode();
-        while (iterNode.nextNode != null && secondList.getBeginNode()!=null){
-            if (secondList.getBeginNode().data > iterNode.data) {
-                if(secondList.getBeginNode().data < iterNode.nextNode.data){
-                    principalList.addAfter(iterNode, secondList.getBeginNode().data);
-                    iterNode=iterNode.nextNode;
-                    secondList.popFront();
-                }else{
-                    iterNode=iterNode.nextNode;
-                }
-            }else{
-                secondList.popFront();
-            }
-        }
-        if(secondList.getBeginNode()!=null){
-            if(principalList.getLastNode().data==secondList.getBeginNode().data){
-                secondList.popFront();
-            }
-            principalList.mergeEnd(secondList);
-        }
-        principalList.removeRepeats();
-        return principalList;
-    }
 
-    public static void punto1UNCODE(){
+    public static void punto1UNCODE() {
         int cases = IN.nextInt();
         for (int i = 0; i < cases; i++) {
             int n, m;
@@ -115,20 +137,44 @@ public class main {
             nLink = readInput(n);
             m = IN.nextInt();
             mLink = readInput(m);
-            //Encontrar la lista principal(aquella con el primer menor elemento)
-            if(n!=0 && m!=0){
-                if (nLink.getBeginNode().data>=mLink.getBeginNode().data) {
-                    mergeAndRemove(mLink, nLink).print();
-                } else {
-                    mergeAndRemove(nLink, mLink).print();
-                }
-            }else{
-                if(n==0){
+
+            if (n != 0 && m != 0) {
+                nLink.mergeEnd(mLink);
+                nLink.sortList();
+                nLink.removeRepeats();
+                nLink.print();
+            } else {
+                if (n == 0) {
+                    mLink.sortList();
+                    mLink.removeRepeats();
                     mLink.print();
-                }else{
+                } else {
+                    nLink.sortList();
+                    nLink.removeRepeats();
                     nLink.print();
                 }
             }
+            if(i+1!=cases){
+                 System.out.println();
+             }
         }
+        IN.close();
+    }
+
+    private static void punto2UNCODE() {
+        int n=IN.nextInt();
+        Integer operaciones[]=new Integer[n];
+        Integer parametros[]=new Integer[n];
+
+        for(int i=0; i<n;i++){
+            int op=IN.nextInt();
+            operaciones[i]=op;
+            if(op==1 || op==2 || op==3){
+               parametros[i]=IN.nextInt();
+            }
+        }
+        IntegerContainer contenedor=new IntegerContainer(operaciones,parametros);
+        contenedor.solucion();
+        
     }
 }

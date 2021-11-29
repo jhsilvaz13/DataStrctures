@@ -12,7 +12,7 @@ public class Stack<T> extends LinkedList<T>{
     public Stack(){
         super();
     }
-    //Agrega al inicio de la lita(final de la cola)
+    //Agrega al inicio de la lita(final de la pila)
     public void push(Node<T> newNode){
         pushFront(newNode);
     }
@@ -22,18 +22,15 @@ public class Stack<T> extends LinkedList<T>{
        popFront();
     }
     
-    //No se puede eliminar al inicio de una pila
-    @Override
-    public void popBack() {
+    //Retorna el elemento que se añadio de ultimas, despues lo elmina
+    public Node<T> peek(){
+        Node<T> node=getBeginNode();
+        pop();
+        return node;
     }
-
-    //No se puede agregar al inicio de una pila
-    @Override
-    public void pushBack(Node<T> newNode) {
-    }
-
-    @Override
-    public void print(){
-        super.print(); //To change body of generated methods, choose Tools | Templates.
+    
+    //Retorna el ultimo elemento añadido pero no lo elimian
+    public Node<T> top(){
+        return  getBeginNode();
     }
 }

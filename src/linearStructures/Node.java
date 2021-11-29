@@ -17,4 +17,7 @@ public class Node<T> {
         this.nextNode=null;
         this.beforeNode=null;
     }
+    public void setData(T data){
+        this.data=data;
+    }
 }
