@@ -22,12 +22,5 @@ public class Queue<T> extends LinkedList<T>{
         popFront();
         return dequeueNode;
     }
-
-    @Override
-    public void pushFront(Node<T> newNode) {
-    }
-
-    @Override
-    public void popBack() {
-    }
+    
 }

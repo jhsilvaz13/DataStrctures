@@ -18,7 +18,7 @@ public class LinkedList<T> {
 
     //Agrega un elemento al final de la lista
     public void pushBack(Node<T> newNode) {
-        if (this.beginNode == null) {
+        if (isEmpty()) {
             this.beginNode = this.lastNode = newNode;
         } else {
             this.lastNode.nextNode = newNode;
@@ -28,11 +28,11 @@ public class LinkedList<T> {
 
     //Eliminar un elemento al final de la lista
     public void popBack() {
-         if(beginNode==null){
+        if (isEmpty()) {
             System.out.println("La lista esta vacia");
-        }else if(beginNode==lastNode){
-            this.beginNode=this.lastNode=null;
-        }else{
+        } else if (beginNode == lastNode) {
+            this.beginNode = this.lastNode = null;
+        } else {
             Node<T> lastB = beginNode;
             while (lastB.nextNode.nextNode != null) {
                 lastB = lastB.nextNode;
@@ -44,7 +44,7 @@ public class LinkedList<T> {
 
     //Agregar elemento al inicio de la lista
     public void pushFront(Node<T> newNode) {
-        if (this.beginNode == null) {
+        if (isEmpty()) {
             this.beginNode = this.lastNode = newNode;
         } else {
             newNode.nextNode = this.beginNode;
@@ -54,10 +54,12 @@ public class LinkedList<T> {
 
     //Eliminar un elemento al inicio de la lista
     public void popFront() {
-        try {
+        if(isEmpty()){
+            System.out.println("La lista esta vacia");
+        }else if(beginNode == lastNode){
+            popBack();
+        }else{
             this.beginNode = this.beginNode.nextNode;
-        } catch (Exception exc) {
-            System.out.println("--La lista está vacia--");
         }
     }
 
@@ -71,7 +73,7 @@ public class LinkedList<T> {
                 System.out.print(iterator.data + " ");
             }
             System.out.println();
-        }else{
+        } else {
             System.out.println();
         }
     }
@@ -79,15 +81,27 @@ public class LinkedList<T> {
     //Añadir un nodo nuevo despues de de node
     public void addAfter(Node<T> node, T data) {
         Node<T> newNode = new Node<T>(data);
-        if (node.nextNode != null) {
-            newNode.nextNode = node.nextNode;
-            node.nextNode = newNode;
-        } else {
+        if (isEmpty()) {
             pushBack(newNode);
+        } else {
+            if (node.nextNode != null) {
+                newNode.nextNode = node.nextNode;
+                node.nextNode = newNode;
+            } else {
+                pushBack(newNode);
+            }
         }
-    }
-    //Agrega al final de la lista otra lista
 
+    }
+
+    public boolean isEmpty() {
+        if (beginNode == null && lastNode == null) {
+            return true;
+        }
+        return false;
+    }
+
+    //Agrega al final de la lista otra lista
     public void mergeEnd(LinkedList<T> secondLinkedList) {
         pushBack(secondLinkedList.beginNode);
     }
