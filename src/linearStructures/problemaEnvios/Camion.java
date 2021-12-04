@@ -13,10 +13,10 @@ import linearStructures.Queue;
  */
 public class Camion {
     private Queue<Paquete> paquetes=new Queue<Paquete>();
-    private int xRegion;
-    private int yRegion;
+    private double xRegion;
+    private double yRegion;
     
-    public  Camion(int xRegion, int yRegion){
+    public  Camion(double xRegion, double yRegion){
         this.xRegion=xRegion;
         this.yRegion=yRegion;
     }
@@ -32,11 +32,11 @@ public class Camion {
     }
     
     
-    public int getxRegion(){
+    public double getxRegion(){
         return xRegion;
     }
     
-    public int getyRegion() {
+    public double getyRegion() {
         return yRegion;
     }
     

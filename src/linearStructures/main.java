@@ -18,22 +18,27 @@ public class main {
 
     public static void main(String[] args) {
         punto2Parcial();
-        //linkedList();
-        //punto2UNCODE();
-        //Stacks();
     }
 
     public static void punto2Parcial() {
-        int xCiudad, yCiudad, cRegiones, nPaquetes, mMontones;
+        double xCiudad, yCiudad; 
+        int cRegiones, nPaquetes, mMontones;
 
         xCiudad = IN.nextInt();
         yCiudad = IN.nextInt();
-        cRegiones = IN.nextInt();
+        cRegiones = IN.nextInt();//Raiz entera
         nPaquetes = IN.nextInt();
         mMontones = IN.nextInt();
 
-        int xRegion = (int) (xCiudad / Math.sqrt(cRegiones));
-        int yRegion = (int) (yCiudad / Math.sqrt(cRegiones));
+        int a = (int) Math.sqrt(cRegiones);
+        int b = (int) Math.sqrt(cRegiones);
+        double xRegion = (xCiudad / a);//(2000,1000)
+        while (a * b != cRegiones) {
+            b += 1;
+        }
+        double yRegion = (yCiudad / b);
+        //System.out.println("xReg: "+xRegion+" yRegion: "+yRegion);
+
         LinkedList<Monton> bodega = hacerMontones(mMontones);
         LinkedList<Camion> cargo = crearCamiones(xCiudad, yCiudad, xRegion, yRegion);
 
@@ -53,7 +58,7 @@ public class main {
             }
             iteratorMonto = iteratorMonto.nextNode;
         }
-        
+
         Node<Camion> camionIterator = cargo.getBeginNode();
         while (camionIterator != null) {
             Queue<Paquete> aux = camionIterator.data.getColaPaquetes();
@@ -75,20 +80,20 @@ public class main {
         }
 
         camionIterator = cargo.getBeginNode();
-        int numCamion=1;
+        int numCamion = 1;
         while (camionIterator != null) {
             System.out.print(numCamion);
             Queue<Paquete> aux = camionIterator.data.getColaPaquetes();
             Node<Paquete> it = aux.getBeginNode();
             while (it != null) {
-                System.out.print(" "+it.data.getSerial());
+                System.out.print(" " + it.data.getSerial());
                 it = it.nextNode;
             }
             camionIterator = camionIterator.nextNode;
-            if(numCamion!=cRegiones){
+            if (numCamion != cRegiones) {
                 System.out.println();
             }
-            numCamion+=1;
+            numCamion += 1;
         }
 
     }
@@ -113,10 +118,10 @@ public class main {
     }
 
     //Crear los camiones necesarios
-    public static LinkedList<Camion> crearCamiones(int xCiudad, int yCiudad, int xRegion, int yRegion) {
+    public static LinkedList<Camion> crearCamiones(double xCiudad, double yCiudad, double xRegion, double yRegion) {
         LinkedList<Camion> cargo = new LinkedList<Camion>();
-        int xAux = xRegion;
-        int yAux = yRegion;
+        double xAux = xRegion;
+        double yAux = yRegion;
         while (yAux <= yCiudad) {
             while (xAux <= xCiudad) {
                 Camion c = new Camion(xAux, yAux);
@@ -134,14 +139,18 @@ public class main {
         return cargo;
     }
 
-    public static int distanciaManhattan(Paquete paq, int xRegion, int yRegion) {
+    public static double distanciaManhattan(Paquete paq, double xRegion, double yRegion) {//2000,//1000
         //Coordenadas del paquete en el primer cuadrante
-        int x = paq.getX() - (xRegion * ((int) (paq.getX() / xRegion)));
-        int y = paq.getY() - (yRegion * ((int) (paq.getY() / yRegion)));
-        //System.out.println("x: " + x + " y: " + y);
+        /*System.out.println("xP: " + paq.getX()+ " yP: " + paq.getY());
+        System.out.println("xRegion:" +xRegion+" yReg: "+yRegion);*/
+        int x =(int) (paq.getX() - (xRegion * ( (int)(paq.getX() / xRegion))));
+        int y = (int)(paq.getY() - (yRegion * ( (int)(paq.getY() / yRegion))));
+        /*System.out.println("x: " + x + " y: " + y);*/
         if (y % 2 == 0) {
+            /*System.out.println("Dist: " +((xRegion * y) + x + y));*/
             return (xRegion * y) + x + y;
         } else {
+            /*System.out.println("Dist: " +((xRegion * y) + (xRegion-x) + y));*/
             return (xRegion * y) + (xRegion - x) + y;
         }
 
