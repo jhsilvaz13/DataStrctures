@@ -8,7 +8,7 @@ package linearStructures;
  *
  * @author jhonz
  */
-public class ArrayList<  T>{
+public class ArrayList<T>{
     private int n=0;
     private T array[];
     public ArrayList(){

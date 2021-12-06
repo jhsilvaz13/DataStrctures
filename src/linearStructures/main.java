@@ -7,6 +7,8 @@ package linearStructures;
 import java.util.Arrays;
 import java.util.Scanner;
 import linearStructures.problemaEnvios.*;
+import mysqlconnect.Mysqlconnect;
+import trees.BinarySearchTree;
 
 /**
  *
@@ -17,9 +19,22 @@ public class main {
     private static final Scanner IN = new Scanner(System.in);
 
     public static void main(String[] args) {
-        punto2Parcial();
+        //punto2Parcial();
+        BST();
     }
-
+    
+    
+    public static void BST(){
+        BinarySearchTree<Integer> arbol=new BinarySearchTree<Integer>();
+        arbol.insert(10);
+        arbol.insert(15);
+        arbol.insert(9);
+        arbol.insert(2);
+        arbol.insert(1);
+        arbol.insert(3);
+        
+        System.out.println(arbol.findMin());
+    }
     public static void punto2Parcial() {
         double xCiudad, yCiudad; 
         int cRegiones, nPaquetes, mMontones;
