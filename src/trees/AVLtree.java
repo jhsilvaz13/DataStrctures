@@ -1,79 +1,82 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package trees;
 
-import linearStructures.Node;
-import linearStructures.Queue;
+import linearStructures.*;
 
 /**
  *
  * @author jhonz
  */
-public class BinarySearchTree<T extends Comparable<? super T>>{
-    
-    private class BinaryNode<T>{
-        //Atributos Binary Node
-        T data;
-        BinaryNode<T> left;
-        BinaryNode<T> right;
-        
-        //Constructores
+public class AVLtree<T extends Comparable<? super T>> {
 
-        public BinaryNode(T data, BinaryNode<T> left, BinaryNode<T> right) {
+    private class AVLNode<T> {
+
+        //Atributos AVL Node
+        T data;
+        AVLNode<T> left;
+        AVLNode<T> right;
+        int height;
+
+        //Constructores
+        public AVLNode(T data, AVLNode<T> left, AVLNode<T> right) {
             this.data = data;
             this.left = left;
             this.right = right;
+            this.height=0;
         }
-       
-    } 
-    //Atributos Binary Search 
-    private BinaryNode<T> root;
-    
+    }
+
+    //Atributos AVLtree
+    private AVLNode<T> root;
+    private static final int BALANCEADO = 1;
+
     //Constructores
-    public BinarySearchTree() {
-        root=null;
+    public AVLtree() {
+        root = null;
     }
 
     /*Metodos*/
     //Hacer vacio el arbol
-    public void makeEmpty(){
-        root=null;
+    public void makeEmpty() {
+        root = null;
     }
-    
+
     //Verificar si el arbol esta vacio
-    public boolean isEmpty(){
-        return root==null;
+    public boolean isEmpty() {
+        return root == null;
     }
-    
+
     //Inserta un nuevo nodo binario
-    public void insert(T x){
-        root=insert(x, root);
+    public void insert(T x) {
+        root = insert(x, root);
     }
+
     //Inserta recursivamente dependiendo si el nuevo dato es mayor o menor 
-    //que el nodo actual
-    private BinaryNode<T> insert(T x, BinaryNode<T> node){
-        if(node==null){
-            return new BinaryNode<T>(x, null, null);
+    //que el nodo actual por ultimo balancear
+    private AVLNode<T> insert(T x, AVLNode<T> node){
+        if (node == null) {
+            return new AVLNode<T>(x, null, null);
         }
         //x es menor que el nodo actual
-        if(x.compareTo(node.data)<0){
-            node.left=insert(x, node.left);
+        if (x.compareTo(node.data) < 0) {
+            node.left = insert(x, node.left);
+        } //x es mayor que el nodo actual
+        else if (x.compareTo(node.data) > 0) {
+            node.right = insert(x, node.right);
         }
-        //x es mayor que el nodo actual
-        else if(x.compareTo(node.data)>0){
-            node.right=insert(x, node.right);
-        }
-        return  node;
+        return balance(node);
     }
+    
     //Retorna si el arbol binario tiene el nodo que contiene a x
     public  boolean contains(T x){
         return  contains(x, root);
     }
     //Llama recursivamente para verifiicar si el nodo actual contiene a x
     //si no se va a la derecha o a la izquierda
-    private boolean contains(T x, BinaryNode<T> node){
+    private boolean contains(T x, AVLNode<T> node){
         if(node==null){
             return  false;
         }
@@ -97,7 +100,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
     }
     
     //Recorrer recursivamente los hijos izquierdos
-    private BinaryNode<T> findMin(BinaryNode<T> node){
+    private AVLNode<T> findMin(AVLNode<T> node){
         if(node.left==null){
             return node;
         }else{
@@ -116,7 +119,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
     }
     
     //Recorrer recursivamente los hijos derechos
-    private BinaryNode<T> findMax(BinaryNode<T> node){
+    private AVLNode<T> findMax(AVLNode<T> node){
         if(node.right==null){
             return node;
         }else{
@@ -130,7 +133,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
     }
     
     //Elima recursivamente el nodo dependiendo si s una hoja, un nodo con un solo hijo o un nodo con dos hijos
-    private BinaryNode<T> remove(T x, BinaryNode<T> node){
+    private AVLNode<T> remove(T x, AVLNode<T> node){
         if(this.isEmpty()){
             return node;
         }
@@ -144,19 +147,76 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
         }else{
             node=(node.left!=null)?node.left:node.right;
         }
+        return balance(node);
+    }
+    
+    //BALANCEO
+    private AVLNode<T> balance(AVLNode<T> node){
+        if(node==null){
+            return node;
+        }
+        //Comprobar si esta desbalanceado por izquierda
+        if( height( node.left ) - height( node.right ) > BALANCEADO){
+            //Comprobar si el desbalanceo es LL O LR
+            if(height( node.left.left ) >= height( node.left.right ) ){
+                node=rotateLL(node);
+            }else{
+                node=rotateLR(node);
+            }
+        }else{
+            //Comprobar si esta desbalanceado por derecha
+           if( height( node.right ) - height( node.left ) > BALANCEADO ){
+                //Comprobar si el desbalanceo es RR O RL
+               if ( height( node.right.right ) >= height( node.right.left ) ) {
+                   node=rotateRR(node);
+               } else {
+                   node=rotateRL(node);
+               }
+           }
+        }
+        node.height = Math.max( height( node.left ), height( node.right ) ) + 1;
         return node;
     }
     
-    
-    //Retorna la altura maxima desde la raiz
-    public int height(){
-        return height(root);
+    //Rotacion Left-Left
+    private AVLNode<T> rotateLL(AVLNode<T> node){
+        AVLNode<T> aux = node.left;
+        node.left = aux.right;
+        aux.right = node;
+        node.height = Math.max( height( node.left ), height( node.right ) ) + 1;
+        aux.height=Math.max(height(aux.left), height(aux.right))+1;
+        return aux;
     }
     
-    //Calcula recursivamente la altura desde node
-    private int height( BinaryNode<T> node )
+    //Rotacion Left-Right
+    private AVLNode<T> rotateLR(AVLNode<T> node){
+        node.left=rotateRR(node.left);
+        return rotateLL(node);
+    }
+    
+    //Rotacion Right-Right
+    private AVLNode<T> rotateRR(AVLNode<T> node){
+        AVLNode<T> aux = node.right;
+        node.right = aux.left;
+        aux.left = node;
+        node.height = Math.max( height( node.left ), height( node.right ) ) + 1;
+        aux.height=Math.max(height(aux.left), height(aux.right))+1;
+        return aux;
+    }
+   
+    //Rotacion Right-Left
+    private AVLNode<T> rotateRL(AVLNode<T> node){
+        node.right=rotateLL(node.right);
+        return rotateRR(node);
+    }
+    
+    //Altura
+    private int height( AVLNode<T> node )
     {
-        return (node==null)?-1:1 + Math.max( height( node.left ), height( node.right ) );    
+        if( node == null )
+            return -1;
+        else
+            return node.height;
     }
     
     //Impresion preorden
@@ -165,7 +225,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
         System.out.println();
     }
     
-    private void printPreorden(BinaryNode<T> node){
+    private void printPreorden(AVLNode<T> node){
         if(node!=null){
             System.out.print(node.data+" ");
             printPreorden(node.left);
@@ -179,7 +239,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
         System.out.println();
     }
     
-    private void printPostorden(BinaryNode<T> node){
+    private void printPostorden(AVLNode<T> node){
         if(node!=null){
             printPostorden(node.left);
             printPostorden(node.right);
@@ -193,7 +253,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
         System.out.println(); 
     }
     
-    private void printInorden(BinaryNode<T> node){
+    private void printInorden(AVLNode<T> node){
         if(node!=null){
             printInorden(node.left);
             System.out.print(node.data+" ");
@@ -206,17 +266,17 @@ public class BinarySearchTree<T extends Comparable<? super T>>{
         printNiveles(root);
         System.out.println();
     }
-    private void printNiveles(BinaryNode<T> node){
-        Queue<BinaryNode<T>> cola=new Queue<BinaryNode<T>>();
-        cola.Enqueue(new Node<BinaryNode<T>>(node));
+    private void printNiveles(AVLNode<T> node){
+        Queue<AVLNode<T>> cola=new Queue<AVLNode<T>>();
+        cola.Enqueue(new Node<AVLNode<T>>(node));
         while(!cola.isEmpty()){
-            BinaryNode<T> aux=cola.Dequeue().getData();
+            AVLNode<T> aux=cola.Dequeue().getData();
             System.out.print(aux.data+" ");
             if(aux.left!=null){
-                cola.Enqueue(new Node<BinaryNode<T>>(aux.left));
+                cola.Enqueue(new Node<AVLNode<T>>(aux.left));
             }
             if(aux.right!=null){
-                cola.Enqueue(new Node<BinaryNode<T>>(aux.right));
+                cola.Enqueue(new Node<AVLNode<T>>(aux.right));
             }
         }
     }

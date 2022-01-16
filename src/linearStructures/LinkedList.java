@@ -78,7 +78,7 @@ public class LinkedList<T> {
         }
     }
 
-    //Añadir un nodo nuevo despues de de node
+    //Añadir un nodo nuevo despues de node
     public void addAfter(Node<T> node, T data) {
         Node<T> newNode = new Node<T>(data);
         if (isEmpty()) {
@@ -93,9 +93,23 @@ public class LinkedList<T> {
         }
 
     }
-
+    //Busca si algun nodo contiene el elemento K
+    public boolean find(T k) {
+        if (!isEmpty()) {
+            Node<T> iterator = beginNode;
+            while (iterator != null) {
+                if (iterator.data.equals(k)) {
+                    return true;
+                }
+                iterator = iterator.nextNode;
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
     public boolean isEmpty() {
-        if (beginNode == null && lastNode == null) {
+        if (beginNode == null) {
             return true;
         }
         return false;

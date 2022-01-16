@@ -34,9 +34,7 @@ public class CircularDoubleLinkedList<T> {
             newNode.beforeNode=aux;
             this.beginNode.beforeNode=newNode;
             newNode.nextNode = beginNode;
-
         }
-
     }
 
     public void print() {

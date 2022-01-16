@@ -4,11 +4,10 @@
  */
 package linearStructures;
 
-import java.util.Arrays;
 import java.util.Scanner;
 import linearStructures.problemaEnvios.*;
 import mysqlconnect.Mysqlconnect;
-import trees.BinarySearchTree;
+import trees.*;
 
 /**
  *
@@ -19,25 +18,57 @@ public class main {
     private static final Scanner IN = new Scanner(System.in);
 
     public static void main(String[] args) {
-        //punto2Parcial();
-        BST();
+        AVL();
+        //dinamicA();
+        //heap();
+        
     }
     
+    public static void heap(){
+        BinaryHeap<Integer> cola= new BinaryHeap<Integer>();
+        cola.enqueue(10);
+        cola.enqueue(15);
+        cola.enqueue(9);
+        cola.enqueue(3);
+        
+        cola.printArray();
+    }
+    
+    public static void AVL(){
+        AVLtree<Integer> avl=new AVLtree<Integer>();
+        avl.insert(20);
+        avl.insert(10);
+        avl.insert(21);
+        avl.insert(6);
+        avl.insert(15);
+        avl.insert(2);
+        avl.insert(7);
+        avl.insert(19);
+        avl.insert(17);
+        avl.insert(16);
+        avl.insert(18);
+
+        avl.printNiveles();
+    }
     
     public static void BST(){
         BinarySearchTree<Integer> arbol=new BinarySearchTree<Integer>();
-        arbol.insert(10);
-        arbol.insert(15);
-        arbol.insert(9);
-        arbol.insert(2);
-        arbol.insert(1);
-        arbol.insert(3);
-        
-        System.out.println(arbol.findMin());
+        arbol.insert(10);//A
+        arbol.insert(15);//C
+        arbol.insert(7);//B
+        arbol.insert(2);//D
+        arbol.insert(9);//E
+        arbol.insert(8);//H
+        arbol.insert(13);//F
+        arbol.insert(14);//I
+        arbol.insert(16);//G
+        //D B H E A F I C G 
+        arbol.printNiveles();
     }
+    
     public static void punto2Parcial() {
-        double xCiudad, yCiudad; 
-        int cRegiones, nPaquetes, mMontones;
+        int xCiudad, yCiudad; 
+        int cRegiones, nPaquetes, mMontones;//1 4 9 16 
 
         xCiudad = IN.nextInt();
         yCiudad = IN.nextInt();
@@ -47,7 +78,7 @@ public class main {
 
         int a = (int) Math.sqrt(cRegiones);
         int b = (int) Math.sqrt(cRegiones);
-        double xRegion = (xCiudad / a);//(2000,1000)
+        double xRegion = (xCiudad / a);//(2000,1000)x: 4000 y:2000 4
         while (a * b != cRegiones) {
             b += 1;
         }
@@ -73,7 +104,7 @@ public class main {
             }
             iteratorMonto = iteratorMonto.nextNode;
         }
-
+        
         Node<Camion> camionIterator = cargo.getBeginNode();
         while (camionIterator != null) {
             Queue<Paquete> aux = camionIterator.data.getColaPaquetes();
@@ -93,7 +124,7 @@ public class main {
             }
             camionIterator = camionIterator.nextNode;
         }
-
+        //print
         camionIterator = cargo.getBeginNode();
         int numCamion = 1;
         while (camionIterator != null) {
@@ -135,10 +166,10 @@ public class main {
     //Crear los camiones necesarios
     public static LinkedList<Camion> crearCamiones(double xCiudad, double yCiudad, double xRegion, double yRegion) {
         LinkedList<Camion> cargo = new LinkedList<Camion>();
-        double xAux = xRegion;
-        double yAux = yRegion;
+        double xAux = xRegion;//2000
+        double yAux = yRegion;//1000
         while (yAux <= yCiudad) {
-            while (xAux <= xCiudad) {
+            while (xAux <= xCiudad) {//
                 Camion c = new Camion(xAux, yAux);
                 cargo.pushBack(new Node<Camion>(c));
                 xAux += xRegion;
@@ -156,9 +187,10 @@ public class main {
 
     public static double distanciaManhattan(Paquete paq, double xRegion, double yRegion) {//2000,//1000
         //Coordenadas del paquete en el primer cuadrante
+        //(2000,1000)
         /*System.out.println("xP: " + paq.getX()+ " yP: " + paq.getY());
         System.out.println("xRegion:" +xRegion+" yReg: "+yRegion);*/
-        int x =(int) (paq.getX() - (xRegion * ( (int)(paq.getX() / xRegion))));
+        int x =(int) (paq.getX() - (xRegion * ( (int)(paq.getX() / xRegion))));//2200-2000=200
         int y = (int)(paq.getY() - (yRegion * ( (int)(paq.getY() / yRegion))));
         /*System.out.println("x: " + x + " y: " + y);*/
         if (y % 2 == 0) {
@@ -195,12 +227,13 @@ public class main {
             for (int j = 0; j < tamañoMazo; j++) {
                 mazo.pushBack(new Node<Integer>(IN.nextInt()));
             }
+            
             for (int j = 0; j < numeroJugadores; j++) {
                 jugadores.pushBack(new Node<Integer>(0));
             }
             //Sumar a los jugadores las cartas mayores 
             Node<Integer> iterator = jugadores.beginNode;
-            while (mazo.isEmpty() == false) {
+            while (mazo.isEmpty() == false){
                 if (mazo.getBeginNode().data >= mazo.getLastNode().data) {
                     iterator.data += mazo.getBeginNode().data;
                     mazo.popFront();
@@ -325,22 +358,22 @@ public class main {
 
     public static void dinamicA() {
         ArrayList<Integer> a = new ArrayList<Integer>();
-        a.add(2);
+        a.push(2);
+        a.push(3);
+        a.push(4);
+        a.push(5);
+        a.push(6);
+        a.push(7);
+        a.push(8);
+        a.pop();
+        a.pop();
+        a.pop();
+        a.pop();
+        a.pop();
+        a.pop();
+        a.push(5);
         a.print();
-        a.add(3);
-        a.print();
-        a.add(4);
-        a.print();
-        a.add(5);
-        a.print();
-        a.add(6);
-        a.print();
-        a.add(7);
-        a.print();
-        a.add(8);
-        a.print();
-        a.add(9);
-        a.print();
+        
         System.out.println(a.getN() + "/" + a.getLen());
     }
 
