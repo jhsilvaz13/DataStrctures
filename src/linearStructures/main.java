@@ -18,10 +18,8 @@ public class main {
     private static final Scanner IN = new Scanner(System.in);
 
     public static void main(String[] args) {
-        AVL();
-        //dinamicA();
-        //heap();
-        
+        //AVL();
+        int x=0;
     }
     
     public static void heap(){
