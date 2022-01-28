@@ -18,54 +18,184 @@ public class main {
     private static final Scanner IN = new Scanner(System.in);
 
     public static void main(String[] args) {
-        //AVL();
-        int x=0;
+       linkedList();
     }
-    
-    public static void heap(){
-        BinaryHeap<Integer> cola= new BinaryHeap<Integer>();
-        cola.enqueue(10);
-        cola.enqueue(15);
-        cola.enqueue(9);
-        cola.enqueue(3);
-        
+
+    public static int addHoras(int hora, int minutos) {
+        hora += minutos;
+        int adicional = hora - ((int) hora / 100) * 100;
+        if (adicional > 60) {
+            hora -= adicional;
+            int restante = adicional % 60;
+            adicional -= restante;
+            adicional /= 60;
+            hora += 100 * adicional;
+            hora += restante;
+            return hora;
+        } else {
+            return hora;
+        }
+    }
+
+    public static void medicamentos() {
+        BinaryHeapMin<Persona> colaPrioridad = new BinaryHeapMin<Persona>();
+        String linea = IN.nextLine();
+        Persona primera = null;
+        LinkedList<Persona> colaFinal = new LinkedList<Persona>();
+        int c = 0;
+        while (linea.compareTo("FIN") != 0) {
+            String[] input = linea.split(" ");
+            int[] datos = new int[4];
+            for (int i = 0; i < 4; i++) {
+                datos[i] = Integer.valueOf(input[i]);
+            }
+            if (primera == null) {
+                primera = new Persona(datos[0], datos[1], datos[2], datos[3]);
+                c += 1;
+            } else {
+                Persona actual = new Persona(datos[0], datos[1], datos[2], datos[3]);
+                if (actual.getHora() == primera.getHora()) {
+                    colaPrioridad.insert(primera);
+                    colaPrioridad.insert(actual);
+                    primera = colaPrioridad.deleteMin();
+                    System.out.println(primera.getCedula());
+                    colaFinal.pushBack(new Node<Persona>(primera));
+                    c = 0;
+                } else {
+                    if (c == 1) {
+                        System.out.println(primera.getCedula());
+                        colaFinal.pushBack(new Node<Persona>(primera));
+                        c = 0;
+                    }
+                    if (actual.getHora() <= addHoras(primera.getHora(),primera.getTiempo())) {
+                        colaPrioridad.insert(actual);
+                    } else {
+                        while (!colaPrioridad.isEmpty() ) {
+                            primera = colaPrioridad.deleteMin();
+                            System.out.println(primera.getCedula());
+                            colaFinal.pushBack(new Node<Persona>(primera));
+                            if(actual.getHora() <= addHoras(primera.getHora(),primera.getTiempo())){
+                                break;
+                            }
+                        }
+                        colaPrioridad.insert(actual);
+                        primera = colaPrioridad.deleteMin();
+                        System.out.println(primera.getCedula());
+                        colaFinal.pushBack(new Node<Persona>(primera));
+                    }
+                }
+            }
+            linea = IN.nextLine();
+        }
+        while (!colaPrioridad.isEmpty()) {
+            System.out.println(colaPrioridad.deleteMin().getCedula());
+            colaFinal.pushBack(new Node<Persona>(colaPrioridad.deleteMin()));
+            
+        }
+        printC(colaFinal);
+    }
+
+
+    public static void printC(LinkedList<Persona> lista) {
+        if (lista.getBeginNode() != null) {
+            Node<Persona> iterator = lista.getBeginNode();
+            while (iterator.nextNode != null) {
+                System.out.println(iterator.data.getCedula());
+                iterator = iterator.nextNode;
+            }
+            System.out.print(iterator.data.getCedula());
+        }
+    }
+
+    public static void RecorridoEdificios() {
+        int x = IN.nextInt();
+        AVLtree<String> arbol = new AVLtree<String>();
+        while (x > 0) {
+            arbol.insert(IN.next());
+            x--;
+        }
+        //arbol.printNiveles();
+        int y = IN.nextInt();
+        DoubleLinkedList<String> camino1 = new DoubleLinkedList<String>();
+        DoubleLinkedList<String> camino2 = new DoubleLinkedList<String>();
+        while (y > 0) {
+            camino1 = arbol.containsAndPush(IN.next());
+            camino2 = arbol.containsAndPush(IN.next());
+            boolean flag = true;
+            Node<String> iterador1 = camino1.getBeginNode();
+            Node<String> iterador2 = camino2.getBeginNode();
+            Stack<String> pila = new Stack<String>();
+            while (flag && iterador2 != null && iterador1 != null) {
+                if (iterador1.getData().compareTo(iterador2.getData()) == 0) {
+                    pila.push(new Node<String>(iterador1.getData()));
+                    camino1.popFront();
+                    camino2.popFront();
+                } else {
+                    flag = false;
+                }
+                iterador1 = iterador1.nextNode();
+                iterador2 = iterador2.nextNode();
+            }
+            LinkedList<String> finalC = new LinkedList<String>();
+            //camino1.printR(); 
+            if (camino1.getLastNode() != null) {
+                Node<String> iterator = camino1.getLastNode();
+                finalC.pushBack(new Node<String>(iterator.getData()));
+                while (iterator.beforeNode() != null) {
+                    iterator = iterator.beforeNode();
+                    finalC.pushBack(new Node<String>(iterator.getData()));
+                }
+            }
+            finalC.pushBack(new Node<String>(pila.top().getData()));
+            //camino2.print();
+            if (camino2.getBeginNode() != null) {
+                Node<String> iterator = camino2.getBeginNode();
+                finalC.pushBack(new Node<String>(iterator.getData()));
+                while (iterator.nextNode() != null) {
+                    iterator = iterator.nextNode();
+                    finalC.pushBack(new Node<String>(iterator.getData()));
+                }
+            }
+            finalC.printC();
+            y--;
+        }
+
+    }
+
+    public static void heap() {
+        BinaryHeapMin<Integer> cola = new BinaryHeapMin<Integer>();
+        cola.insert(10);
+        cola.insert(15);
+        cola.insert(9);
+        cola.insert(3);
+
         cola.printArray();
     }
-    
-    public static void AVL(){
-        AVLtree<Integer> avl=new AVLtree<Integer>();
-        avl.insert(20);
-        avl.insert(10);
-        avl.insert(21);
-        avl.insert(6);
-        avl.insert(15);
-        avl.insert(2);
-        avl.insert(7);
-        avl.insert(19);
-        avl.insert(17);
-        avl.insert(16);
-        avl.insert(18);
 
-        avl.printNiveles();
-    }
-    
-    public static void BST(){
-        BinarySearchTree<Integer> arbol=new BinarySearchTree<Integer>();
-        arbol.insert(10);//A
-        arbol.insert(15);//C
-        arbol.insert(7);//B
+    public static void AVL() {
+        AVLtree<Integer> arbol = new AVLtree<Integer>();
+        arbol.insert(9);//A
+        arbol.insert(0);//C
+        arbol.insert(3);//B
         arbol.insert(2);//D
-        arbol.insert(9);//E
-        arbol.insert(8);//H
-        arbol.insert(13);//F
-        arbol.insert(14);//I
-        arbol.insert(16);//G
+        arbol.insert(1);//E
+        arbol.insert(6);//H
+        arbol.insert(7);//F
+        arbol.insert(8);//I
+        arbol.insert(4);//G
+        arbol.insert(5);//G
+
+        arbol.printNiveles();
+    }
+
+    public static void BST() {
+        BinarySearchTree<Integer> arbol = new BinarySearchTree<Integer>();
         //D B H E A F I C G 
         arbol.printNiveles();
     }
-    
+
     public static void punto2Parcial() {
-        int xCiudad, yCiudad; 
+        int xCiudad, yCiudad;
         int cRegiones, nPaquetes, mMontones;//1 4 9 16 
 
         xCiudad = IN.nextInt();
@@ -102,7 +232,7 @@ public class main {
             }
             iteratorMonto = iteratorMonto.nextNode;
         }
-        
+
         Node<Camion> camionIterator = cargo.getBeginNode();
         while (camionIterator != null) {
             Queue<Paquete> aux = camionIterator.data.getColaPaquetes();
@@ -188,8 +318,8 @@ public class main {
         //(2000,1000)
         /*System.out.println("xP: " + paq.getX()+ " yP: " + paq.getY());
         System.out.println("xRegion:" +xRegion+" yReg: "+yRegion);*/
-        int x =(int) (paq.getX() - (xRegion * ( (int)(paq.getX() / xRegion))));//2200-2000=200
-        int y = (int)(paq.getY() - (yRegion * ( (int)(paq.getY() / yRegion))));
+        int x = (int) (paq.getX() - (xRegion * ((int) (paq.getX() / xRegion))));//2200-2000=200
+        int y = (int) (paq.getY() - (yRegion * ((int) (paq.getY() / yRegion))));
         /*System.out.println("x: " + x + " y: " + y);*/
         if (y % 2 == 0) {
             /*System.out.println("Dist: " +((xRegion * y) + x + y));*/
@@ -225,13 +355,13 @@ public class main {
             for (int j = 0; j < tamañoMazo; j++) {
                 mazo.pushBack(new Node<Integer>(IN.nextInt()));
             }
-            
+
             for (int j = 0; j < numeroJugadores; j++) {
                 jugadores.pushBack(new Node<Integer>(0));
             }
             //Sumar a los jugadores las cartas mayores 
             Node<Integer> iterator = jugadores.beginNode;
-            while (mazo.isEmpty() == false){
+            while (mazo.isEmpty() == false) {
                 if (mazo.getBeginNode().data >= mazo.getLastNode().data) {
                     iterator.data += mazo.getBeginNode().data;
                     mazo.popFront();
@@ -311,14 +441,10 @@ public class main {
         linkedLista.pushBack(new Node<Integer>(14));
         linkedLista.pushBack(new Node<Integer>(15));
         linkedLista.pushBack(new Node<Integer>(16));
-        linkedLista.pushFront(new Node<Integer>(10));
-        linkedLista.pushFront(new Node<Integer>(9));
-        linkedLista.pushFront(new Node<Integer>(8));
-        linkedLista.pushFront(new Node<Integer>(7));
-        linkedLista.popBack();
+        linkedLista.print();
+        linkedLista.delete(11);
+        linkedLista.delete(1);
 
-        linkedLista.popBack();
-        linkedLista.popBack();
         linkedLista.print();
 
     }
@@ -371,7 +497,7 @@ public class main {
         a.pop();
         a.push(5);
         a.print();
-        
+
         System.out.println(a.getN() + "/" + a.getLen());
     }
 

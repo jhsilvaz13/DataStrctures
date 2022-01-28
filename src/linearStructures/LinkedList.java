@@ -33,8 +33,10 @@ public class LinkedList<T> {
         } else if (beginNode == lastNode) {
             this.beginNode = this.lastNode = null;
         } else {
+
             Node<T> lastB = beginNode;
             while (lastB.nextNode.nextNode != null) {
+
                 lastB = lastB.nextNode;
             }
             lastB.nextNode = null;
@@ -54,11 +56,11 @@ public class LinkedList<T> {
 
     //Eliminar un elemento al inicio de la lista
     public void popFront() {
-        if(isEmpty()){
+        if (isEmpty()) {
             System.out.println("La lista esta vacia");
-        }else if(beginNode == lastNode){
+        } else if (beginNode == lastNode) {
             popBack();
-        }else{
+        } else {
             this.beginNode = this.beginNode.nextNode;
         }
     }
@@ -73,6 +75,19 @@ public class LinkedList<T> {
                 System.out.print(iterator.data + " ");
             }
             System.out.println();
+        } else {
+            System.out.println();
+        }
+    }
+
+    public void printC() {
+        if (this.beginNode != null) {
+            Node<T> iterator = beginNode;
+            while (iterator.nextNode != null) {
+                System.out.print(iterator.data + ",");
+                iterator = iterator.nextNode;
+            }
+            System.out.println(iterator.data);
         } else {
             System.out.println();
         }
@@ -93,7 +108,32 @@ public class LinkedList<T> {
         }
 
     }
+
+    //Elimina el nodo que contenga a K
+    public void delete(T k) {
+        if (!isEmpty()) {
+            Node<T> iterator = this.beginNode;
+            if (iterator.data.equals(k)) {
+                popFront();
+            } else if (this.lastNode.data.equals(k) ) {
+                popBack();
+            } else {
+                while (iterator.nextNode != null) {
+                    if (iterator.nextNode.data.equals(k)) {
+                        if (iterator.nextNode.nextNode == null) {
+                            popBack();
+                            break;
+                        } else {
+                            iterator.nextNode = iterator.nextNode.nextNode;
+                        }
+                    }
+                    iterator = iterator.nextNode;
+                }
+            }
+        }
+    }
     //Busca si algun nodo contiene el elemento K
+
     public boolean find(T k) {
         if (!isEmpty()) {
             Node<T> iterator = beginNode;
@@ -108,6 +148,7 @@ public class LinkedList<T> {
             return false;
         }
     }
+
     public boolean isEmpty() {
         if (beginNode == null) {
             return true;

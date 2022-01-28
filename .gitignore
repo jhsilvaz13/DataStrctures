@@ -3,6 +3,4 @@ build
 dist
 manifest.mf
 nbproject
-src/linearStructures/IntegerContainer.java
-src/mysqlconnect/
 complejidad.jpeg

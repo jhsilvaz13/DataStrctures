@@ -37,7 +37,6 @@ public class BinaryHeap<T extends Comparable<? super T>> {
                 array = Aprima;
             }   
         }
-        System.out.println("as");
         percolateUp(e);
     }
 
@@ -53,7 +52,6 @@ public class BinaryHeap<T extends Comparable<? super T>> {
             T minItem = findMin();
             array[1] = array[n--];
             percolateDown(1);
-
             return minItem;
         }
         return null;

@@ -57,9 +57,12 @@ public class DoubleLinkedList<T> {
     public void popFront() {
         if (isEmpty()) {
             System.out.println("La lista esta vacia");
-        } else {
+        }else if(beginNode==lastNode){
+            beginNode=lastNode=null;
+        } 
+        else {
             beginNode = beginNode.nextNode;
-            beginNode.beforeNode = null;
+            beginNode.beforeNode=null;
         }
     }
 
@@ -131,6 +134,14 @@ public class DoubleLinkedList<T> {
             }
         }
     }
+    
+        public Node<T> getBeginNode() {
+        return this.beginNode;
+    }
+
+    public Node<T> getLastNode() {
+        return this.lastNode;
+    }
 
     //imprimir la lista de inicio a fin
     public void print() {
@@ -139,6 +150,18 @@ public class DoubleLinkedList<T> {
             System.out.print(iterator.data + " ");
             while (iterator.nextNode != null) {
                 iterator = iterator.nextNode;
+                System.out.print(iterator.data + " ");
+            }
+            System.out.println();
+        }
+    }
+    
+    public void printR() {
+        if (lastNode != null) {
+            Node<T> iterator = lastNode;
+            System.out.print(iterator.data + " ");
+            while (iterator.beforeNode != null) {
+                iterator = iterator.beforeNode;
                 System.out.print(iterator.data + " ");
             }
             System.out.println();
